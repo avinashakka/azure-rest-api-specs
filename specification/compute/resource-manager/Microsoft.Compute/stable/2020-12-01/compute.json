@@ -3038,20 +3038,32 @@
           "Create a vm with Host Encryption using encryptionAtHost property.": {
             "$ref": "./examples/CreateAVmWithEncryptionAtHost.json"
           },
-          "Create a vm with a patch setting patchMode of AutomaticByOS.": {
-            "$ref": "./examples/CreateAVmWithPatchSettingModeOfAutomaticByOS.json"
+          "Create a Windows vm with a patch setting patchMode of AutomaticByOS.": {
+            "$ref": "./examples/CreateAWindowsVmWithPatchSettingModeOfAutomaticByOS.json"
           },
-          "Create a vm with a patch setting patchMode of AutomaticByPlatform.": {
-            "$ref": "./examples/CreateAVmWithPatchSettingModeOfAutomaticByPlatform.json"
+          "Create a Windows vm with a patch setting patchMode of AutomaticByPlatform.": {
+            "$ref": "./examples/CreateAWindowsVmWithPatchSettingModeOfAutomaticByPlatform.json"
           },
-          "Create a vm with a patch setting patchMode of Manual.": {
-            "$ref": "./examples/CreateAVmWithPatchSettingModeOfManual.json"
+          "Create a Windows vm with a patch setting patchMode of Manual.": {
+            "$ref": "./examples/CreateAWindowsVmWithPatchSettingModeOfManual.json"
+          },
+          "Create a Windows vm with a patch setting patchMode of AutomaticByPlatform and enableHotpatching set to true.": {
+            "$ref": "./examples/CreateAWindowsVmWithPatchSettingModeOfAutomaticByPlatformAndEnableHotPatchingTrue.json"
+          },
+          "Create a Linux vm with a patch setting patchMode of AutomaticByPlatform.": {
+            "$ref": "./examples/CreateALinuxVmWithPatchSettingModeOfAutomaticByPlatform.json"
+          },
+          "Create a Linux vm with a patch setting patchMode of ImageDefault.": {
+            "$ref": "./examples/CreateALinuxVmWithPatchSettingModeOfImageDefault.json"
           },
           "Create a vm with an extensions time budget.": {
             "$ref": "./examples/CreateAVmWithExtensionsTimeBudget.json"
           },
           "Create a vm with Application Profile.": {
             "$ref": "./examples/CreateAVmWithApplicationProfile.json"
+          },
+          "Create a VM with Uefi Settings of secureBoot and vTPM.": {
+            "$ref": "./examples/CreateAVmWithUefiSettings.json"
           }
         }
       },
@@ -3132,6 +3144,13 @@
             "description": "The name of the virtual machine."
           },
           {
+            "name": "forceDeletion",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "description": "Optional parameter to force delete virtual machines.(Feature in Preview)"
+          },
+          {
             "$ref": "#/parameters/ApiVersionParameter"
           },
           {
@@ -3149,7 +3168,12 @@
             "description": "No Content"
           }
         },
-        "x-ms-long-running-operation": true
+        "x-ms-long-running-operation": true,
+        "x-ms-examples": {
+          "Force delete a VM": {
+            "$ref": "./examples/ForceDeleteVirtualMachine.json"
+          }
+        }
       },
       "get": {
         "tags": [
@@ -3967,6 +3991,72 @@
         }
       }
     },
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachines/{vmName}/installPatches": {
+      "post": {
+        "tags": [
+          "VirtualMachines"
+        ],
+        "operationId": "VirtualMachines_InstallPatches",
+        "description": "Installs patches on the VM.",
+        "x-ms-examples": {
+          "Install patch state of a virtual machine.": {
+            "$ref": "./examples/VirtualMachineInstallPatches.json"
+          }
+        },
+        "parameters": [
+          {
+            "name": "resourceGroupName",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The name of the resource group."
+          },
+          {
+            "name": "vmName",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The name of the virtual machine."
+          },
+          {
+            "name": "installPatchesInput",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/VirtualMachineInstallPatchesParameters"
+            },
+            "description": "Input for InstallPatches as directly received by the API"
+          },
+          {
+            "$ref": "#/parameters/ApiVersionParameter"
+          },
+          {
+            "$ref": "#/parameters/SubscriptionIdParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/VirtualMachineInstallPatchesResult"
+            }
+          },
+          "202": {
+            "description": "Accepted"
+          },
+          "default": {
+            "description": "Error response describing why the operation failed.",
+            "schema": {
+              "$ref": "#/definitions/CloudError"
+            }
+          }
+        },
+        "x-ms-long-running-operation": true,
+        "x-ms-long-running-operation-options": {
+          "final-state-via": "location"
+        }
+      }
+    },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachineScaleSets/{vmScaleSetName}": {
       "put": {
         "tags": [
@@ -4083,6 +4173,9 @@
           },
           "Create a scale set with Application Profile": {
             "$ref": "./examples/CreateAScaleSetWithApplicationProfile.json"
+          },
+          "Create a scale set with Uefi Settings of secureBoot and vTPM.": {
+            "$ref": "./examples/CreateAScaleSetWithUefiSettings.json"
           }
         }
       },
@@ -4155,6 +4248,13 @@
             "description": "The name of the VM scale set."
           },
           {
+            "name": "forceDeletion",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "description": "Optional parameter to force delete a VM scale set. (Feature in Preview)"
+          },
+          {
             "$ref": "#/parameters/ApiVersionParameter"
           },
           {
@@ -4172,7 +4272,12 @@
             "description": "No Content"
           }
         },
-        "x-ms-long-running-operation": true
+        "x-ms-long-running-operation": true,
+        "x-ms-examples": {
+          "Force Delete a VM scale set.": {
+            "$ref": "./examples/ForceDeleteVirtualMachineScaleSets.json"
+          }
+        }
       },
       "get": {
         "tags": [
@@ -4296,6 +4401,13 @@
               "$ref": "#/definitions/VirtualMachineScaleSetVMInstanceRequiredIDs"
             },
             "description": "A list of virtual machine instance IDs from the VM scale set."
+          },
+          {
+            "name": "forceDeletion",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "description": "Optional parameter to force delete virtual machines from the VM scale set. (Feature in Preview)"
           },
           {
             "$ref": "#/parameters/ApiVersionParameter"
@@ -5509,7 +5621,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/VirtualMachineExtension"
+              "$ref": "#/definitions/VirtualMachineScaleSetVMExtension"
             },
             "description": "Parameters supplied to the Create Virtual Machine Extension operation."
           },
@@ -5524,13 +5636,13 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/VirtualMachineExtension"
+              "$ref": "#/definitions/VirtualMachineScaleSetVMExtension"
             }
           },
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/VirtualMachineExtension"
+              "$ref": "#/definitions/VirtualMachineScaleSetVMExtension"
             }
           },
           "default": {
@@ -5587,7 +5699,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/VirtualMachineExtensionUpdate"
+              "$ref": "#/definitions/VirtualMachineScaleSetVMExtensionUpdate"
             },
             "description": "Parameters supplied to the Update Virtual Machine Extension operation."
           },
@@ -5602,7 +5714,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/VirtualMachineExtension"
+              "$ref": "#/definitions/VirtualMachineScaleSetVMExtension"
             }
           },
           "default": {
@@ -5738,7 +5850,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/VirtualMachineExtension"
+              "$ref": "#/definitions/VirtualMachineScaleSetVMExtension"
             }
           },
           "default": {
@@ -5802,7 +5914,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/VirtualMachineExtensionsListResult"
+              "$ref": "#/definitions/VirtualMachineScaleSetVMExtensionsListResult"
             }
           },
           "default": {
@@ -6059,6 +6171,13 @@
             "description": "The instance ID of the virtual machine."
           },
           {
+            "name": "forceDeletion",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "description": "Optional parameter to force delete a virtual machine from a VM scale set. (Feature in Preview)"
+          },
+          {
             "$ref": "#/parameters/ApiVersionParameter"
           },
           {
@@ -6076,7 +6195,12 @@
             "description": "No Content"
           }
         },
-        "x-ms-long-running-operation": true
+        "x-ms-long-running-operation": true,
+        "x-ms-examples": {
+          "Force Delete a virtual machine from a VM scale set.": {
+            "$ref": "./examples/ForceDeleteVirtualMachineScaleSetVM.json"
+          }
+        }
       },
       "get": {
         "tags": [
@@ -7091,7 +7215,7 @@
         },
         "supportAutomaticPlacement": {
           "type": "boolean",
-          "description": "Specifies whether virtual machines or virtual machine scale sets can be placed automatically on the dedicated host group. Automatic placement means resources are allocated on dedicated hosts, that are chosen by Azure, under the dedicated host group. The value is defaulted to 'true' when not provided. <br><br>Minimum api-version: 2020-06-01."
+          "description": "Specifies whether virtual machines or virtual machine scale sets can be placed automatically on the dedicated host group. Automatic placement means resources are allocated on dedicated hosts, that are chosen by Azure, under the dedicated host group. The value is defaulted to 'false' when not provided. <br><br>Minimum api-version: 2020-06-01."
         }
       },
       "required": [
@@ -7672,6 +7796,30 @@
       ],
       "description": "Describes a Virtual Machine Extension."
     },
+    "VirtualMachineScaleSetVMExtension": {
+      "properties": {
+        "name": {
+          "readOnly": true,
+          "type": "string",
+          "description": "The name of the extension."
+        },
+        "type": {
+          "readOnly": true,
+          "type": "string",
+          "description": "Resource type"
+        },
+        "properties": {
+          "x-ms-client-flatten": true,
+          "$ref": "#/definitions/VirtualMachineExtensionProperties"
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/SubResourceReadOnly"
+        }
+      ],
+      "description": "Describes a VMSS VM Extension."
+    },
     "VirtualMachineExtensionUpdate": {
       "properties": {
         "properties": {
@@ -7686,6 +7834,30 @@
       ],
       "description": "Describes a Virtual Machine Extension."
     },
+    "VirtualMachineScaleSetVMExtensionUpdate": {
+      "properties": {
+        "name": {
+          "readOnly": true,
+          "type": "string",
+          "description": "The name of the extension."
+        },
+        "type": {
+          "readOnly": true,
+          "type": "string",
+          "description": "Resource type"
+        },
+        "properties": {
+          "x-ms-client-flatten": true,
+          "$ref": "#/definitions/VirtualMachineExtensionUpdateProperties"
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/SubResourceReadOnly"
+        }
+      ],
+      "description": "Describes a VMSS VM Extension."
+    },
     "VirtualMachineExtensionsListResult": {
       "properties": {
         "value": {
@@ -7697,6 +7869,18 @@
         }
       },
       "description": "The List Extension operation response"
+    },
+    "VirtualMachineScaleSetVMExtensionsListResult": {
+      "properties": {
+        "value": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/VirtualMachineScaleSetVMExtension"
+          },
+          "description": "The list of VMSS VM extensions"
+        }
+      },
+      "description": "The List VMSS VM Extension operation response"
     },
     "VirtualMachineSoftwarePatchProperties": {
       "properties": {
@@ -7715,7 +7899,7 @@
           "readOnly": true,
           "description": "The version number of the patch. This property applies only to Linux patches."
         },
-        "kbid": {
+        "kbId": {
           "type": "string",
           "readOnly": true,
           "description": "The KBID of the patch. Only applies to Windows patches."
@@ -7733,12 +7917,13 @@
           "readOnly": true,
           "description": "Describes the reboot requirements of the patch.",
           "enum": [
+            "Unknown",
             "NeverReboots",
             "AlwaysRequiresReboot",
             "CanRequestReboot"
           ],
           "x-ms-enum": {
-            "name": "SoftwareUpdateRebootBehavior",
+            "name": "VMGuestPatchRebootBehavior",
             "modelAsString": true
           }
         },
@@ -7762,13 +7947,9 @@
         "assessmentState": {
           "type": "string",
           "readOnly": true,
-          "description": "Describes the outcome of an install operation for a given patch.",
+          "description": "Describes the availability of a given patch.",
           "enum": [
-            "Installed",
-            "Failed",
-            "Excluded",
-            "NotSelected",
-            "Pending",
+            "Unknown",
             "Available"
           ],
           "x-ms-enum": {
@@ -7784,8 +7965,9 @@
         "status": {
           "type": "string",
           "readOnly": true,
-          "description": "The overall success or failure status of the operation. It remains \"InProgress\" until the operation completes. At that point it will become \"Failed\", \"Succeeded\", or \"CompletedWithWarnings.\"",
+          "description": "The overall success or failure status of the operation. It remains \"InProgress\" until the operation completes. At that point it will become \"Unknown\", \"Failed\", \"Succeeded\", or \"CompletedWithWarnings.\"",
           "enum": [
+            "Unknown",
             "InProgress",
             "Failed",
             "Succeeded",
@@ -7824,7 +8006,7 @@
           "format": "date-time",
           "description": "The UTC timestamp when the operation began."
         },
-        "patches": {
+        "availablePatches": {
           "type": "array",
           "readOnly": true,
           "items": {
@@ -7840,6 +8022,276 @@
         }
       },
       "description": "Describes the properties of an AssessPatches result."
+    },
+    "VirtualMachineInstallPatchesParameters": {
+      "properties": {
+        "maximumDuration": {
+          "type": "string",
+          "description": "Specifies the maximum amount of time that the operation will run. It must be an ISO 8601-compliant duration string such as PT4H (4 hours)"
+        },
+        "rebootSetting": {
+          "type": "string",
+          "description": "Defines when it is acceptable to reboot a VM during a software update operation.",
+          "enum": [
+            "IfRequired",
+            "Never",
+            "Always"
+          ],
+          "x-ms-enum": {
+            "name": "VMGuestPatchRebootSetting",
+            "modelAsString": true
+          }
+        },
+        "windowsParameters": {
+          "$ref": "#/definitions/WindowsParameters",
+          "description": "Input for InstallPatches on a Windows VM, as directly received by the API"
+        },
+        "linuxParameters": {
+          "$ref": "#/definitions/LinuxParameters",
+          "description": "Input for InstallPatches on a Linux VM, as directly received by the API"
+        }
+      },
+      "required": [
+        "maximumDuration",
+        "rebootSetting"
+      ],
+      "description": "Input for InstallPatches as directly received by the API"
+    },
+    "WindowsParameters": {
+      "properties": {
+        "classificationsToInclude": {
+          "type": "array",
+          "description": "The update classifications to select when installing patches for Windows.",
+          "items": {
+            "type": "string",
+            "enum": [
+              "Critical",
+              "Security",
+              "UpdateRollUp",
+              "FeaturePack",
+              "ServicePack",
+              "Definition",
+              "Tools",
+              "Updates"
+            ],
+            "x-ms-enum": {
+              "name": "VMGuestPatchClassification_Windows",
+              "modelAsString": true
+            }
+          }
+        },
+        "kbNumbersToInclude": {
+          "type": "array",
+          "description": "Kbs to include in the patch operation",
+          "items": {
+            "type": "string"
+          }
+        },
+        "kbNumbersToExclude": {
+          "type": "array",
+          "description": "Kbs to exclude in the patch operation",
+          "items": {
+            "type": "string"
+          }
+        },
+        "excludeKbsRequiringReboot": {
+          "type": "boolean",
+          "description": "Filters out Kbs that don't have an InstallationRebootBehavior of 'NeverReboots' when this is set to true."
+        },
+        "maxPatchPublishDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "This is used to install patches that were published on or before this given max published date."
+        }
+      },
+      "description": "Input for InstallPatches on a Windows VM, as directly received by the API"
+    },
+    "LinuxParameters": {
+      "properties": {
+        "classificationsToInclude": {
+          "type": "array",
+          "description": "The update classifications to select when installing patches for Linux.",
+          "items": {
+            "type": "string",
+            "enum": [
+              "Critical",
+              "Security",
+              "Other"
+            ],
+            "x-ms-enum": {
+              "name": "VMGuestPatchClassification_Linux",
+              "modelAsString": true
+            }
+          }
+        },
+        "packageNameMasksToInclude": {
+          "type": "array",
+          "description": "packages to include in the patch operation. Format: packageName_packageVersion",
+          "items": {
+            "type": "string"
+          }
+        },
+        "packageNameMasksToExclude": {
+          "type": "array",
+          "description": "packages to exclude in the patch operation. Format: packageName_packageVersion",
+          "items": {
+            "type": "string"
+          }
+        },
+        "maintenanceRunId": {
+          "type": "string",
+          "description": "This is used as a maintenance run identifier for Auto VM Guest Patching in Linux."
+        }
+      },
+      "description": "Input for InstallPatches on a Linux VM, as directly received by the API"
+    },
+    "VirtualMachineInstallPatchesResult": {
+      "properties": {
+        "status": {
+          "type": "string",
+          "readOnly": true,
+          "description": "The overall success or failure status of the operation. It remains \"InProgress\" until the operation completes. At that point it will become \"Failed\", \"Succeeded\", \"Unknown\" or \"CompletedWithWarnings.\"",
+          "enum": [
+            "Unknown",
+            "InProgress",
+            "Failed",
+            "Succeeded",
+            "CompletedWithWarnings"
+          ],
+          "x-ms-enum": {
+            "name": "PatchOperationStatus",
+            "modelAsString": true
+          }
+        },
+        "installationActivityId": {
+          "type": "string",
+          "readOnly": true,
+          "description": "The activity ID of the operation that produced this result. It is used to correlate across CRP and extension logs."
+        },
+        "rebootStatus": {
+          "type": "string",
+          "readOnly": true,
+          "description": "The reboot state of the VM following completion of the operation.",
+          "enum": [
+            "Unknown",
+            "NotNeeded",
+            "Required",
+            "Started",
+            "Failed",
+            "Completed"
+          ],
+          "x-ms-enum": {
+            "name": "VMGuestPatchRebootStatus",
+            "modelAsString": true
+          }
+        },
+        "maintenanceWindowExceeded": {
+          "type": "boolean",
+          "readOnly": true,
+          "description": "Whether the operation ran out of time before it completed all its intended actions."
+        },
+        "excludedPatchCount": {
+          "type": "integer",
+          "readOnly": true,
+          "format": "int32",
+          "description": "The number of patches that were not installed due to the user blocking their installation."
+        },
+        "notSelectedPatchCount": {
+          "type": "integer",
+          "readOnly": true,
+          "format": "int32",
+          "description": "The number of patches that were detected as available for install, but did not meet the operation's criteria."
+        },
+        "pendingPatchCount": {
+          "type": "integer",
+          "readOnly": true,
+          "format": "int32",
+          "description": "The number of patches that were identified as meeting the installation criteria, but were not able to be installed. Typically this happens when maintenanceWindowExceeded == true."
+        },
+        "installedPatchCount": {
+          "type": "integer",
+          "readOnly": true,
+          "format": "int32",
+          "description": "The number of patches successfully installed."
+        },
+        "failedPatchCount": {
+          "type": "integer",
+          "readOnly": true,
+          "format": "int32",
+          "description": "The number of patches that could not be installed due to some issue. See errors for details."
+        },
+        "patches": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "x-ms-client-flatten": true,
+            "$ref": "#/definitions/PatchInstallationDetail"
+          },
+          "description": "The patches that were installed during the operation."
+        },
+        "startDateTime": {
+          "type": "string",
+          "readOnly": true,
+          "format": "date-time",
+          "description": "The UTC timestamp when the operation began."
+        },
+        "error": {
+          "$ref": "#/definitions/ApiError",
+          "readOnly": true,
+          "description": "The errors that were encountered during execution of the operation. The details array contains the list of them."
+        }
+      },
+      "description": "The result summary of an installation operation."
+    },
+    "PatchInstallationDetail": {
+      "properties": {
+        "patchId": {
+          "type": "string",
+          "readOnly": true,
+          "description": "A unique identifier for the patch."
+        },
+        "name": {
+          "type": "string",
+          "readOnly": true,
+          "description": "The friendly name of the patch."
+        },
+        "version": {
+          "type": "string",
+          "readOnly": true,
+          "description": "The version string of the package. It may conform to Semantic Versioning. Only applies to Linux."
+        },
+        "kbId": {
+          "type": "string",
+          "readOnly": true,
+          "description": "The KBID of the patch. Only applies to Windows patches."
+        },
+        "classifications": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "type": "string"
+          },
+          "description": "The classification(s) of the patch as provided by the patch publisher."
+        },
+        "installationState": {
+          "type": "string",
+          "readOnly": true,
+          "description": "The state of the patch after the installation operation completed.",
+          "enum": [
+            "Unknown",
+            "Installed",
+            "Failed",
+            "Excluded",
+            "NotSelected",
+            "Pending"
+          ],
+          "x-ms-enum": {
+            "name": "PatchInstallationState",
+            "modelAsString": true
+          }
+        }
+      },
+      "description": "Information about a specific patch that was encountered during an installation action."
     },
     "PurchasePlan": {
       "properties": {
@@ -7906,6 +8358,19 @@
       ],
       "description": "Describes automatic OS upgrade properties on the image."
     },
+    "VirtualMachineImageFeature": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the feature."
+        },
+        "value": {
+          "type": "string",
+          "description": "The corresponding value for the feature."
+        }
+      },
+      "description": "Specifies additional capabilities supported by the image"
+    },
     "VirtualMachineImageProperties": {
       "properties": {
         "plan": {
@@ -7929,6 +8394,12 @@
         "disallowed": {
           "$ref": "#/definitions/DisallowedConfiguration",
           "description": "Specifies disallowed configuration for the VirtualMachine created from the image"
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/VirtualMachineImageFeature"
+          }
         }
       },
       "description": "Describes the properties of a Virtual Machine Image."
@@ -8109,7 +8580,7 @@
       "properties": {
         "vmSize": {
           "type": "string",
-          "description": "Specifies the size of the virtual machine. For more information about virtual machine sizes, see [Sizes for virtual machines](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-windows-sizes?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json). <br><br> The available VM sizes depend on region and availability set. For a list of available sizes use these APIs:  <br><br> [List all available virtual machine sizes in an availability set](https://docs.microsoft.com/rest/api/compute/availabilitysets/listavailablesizes) <br><br> [List all available virtual machine sizes in a region](https://docs.microsoft.com/rest/api/compute/virtualmachinesizes/list) <br><br> [List all available virtual machine sizes for resizing](https://docs.microsoft.com/rest/api/compute/virtualmachines/listavailablesizes)",
+          "description": "Specifies the size of the virtual machine. <br><br> The enum data type is currently deprecated and will be removed by December 23rd 2023. <br><br> Recommended way to get the list of available sizes is using these APIs: <br><br> [List all available virtual machine sizes in an availability set](https://docs.microsoft.com/rest/api/compute/availabilitysets/listavailablesizes) <br><br> [List all available virtual machine sizes in a region]( https://docs.microsoft.com/en-us/rest/api/compute/resourceskus/list) <br><br> [List all available virtual machine sizes for resizing](https://docs.microsoft.com/rest/api/compute/virtualmachines/listavailablesizes). For more information about virtual machine sizes, see [Sizes for virtual machines](https://docs.microsoft.com/en-us/azure/virtual-machines/sizes). <br><br> The available VM sizes depend on region and availability set.",
           "enum": [
             "Basic_A0",
             "Basic_A1",
@@ -8680,11 +9151,39 @@
       },
       "description": "Contains the list of gallery applications that should be made available to the VM/VMSS"
     },
+    "UefiSettings": {
+      "properties": {
+        "secureBootEnabled": {
+          "type": "boolean",
+          "description": "Specifies whether secure boot should be enabled on the virtual machine. <br><br>Minimum api-version: 2020-12-01"
+        },
+        "vTpmEnabled": {
+          "type": "boolean",
+          "description": "Specifies whether vTPM should be enabled on the virtual machine. <br><br>Minimum api-version: 2020-12-01"
+        }
+      },
+      "description": "Specifies the security settings like secure boot and vTPM used while creating the virtual machine. <br><br>Minimum api-version: 2020-12-01"
+    },
     "SecurityProfile": {
       "properties": {
+        "uefiSettings": {
+          "$ref": "#/definitions/UefiSettings",
+          "description": "Specifies the security settings like secure boot and vTPM used while creating the virtual machine. <br><br>Minimum api-version: 2020-12-01"
+        },
         "encryptionAtHost": {
           "type": "boolean",
           "description": "This property can be used by user in the request to enable or disable the Host Encryption for the virtual machine or virtual machine scale set. This will enable the encryption for all the disks including Resource/Temp disk at host itself. <br><br> Default: The Encryption at host will be disabled unless this property is set to true for the resource."
+        },
+        "securityType": {
+          "type": "string",
+          "description": "Specifies the SecurityType of the virtual machine. It is set as TrustedLaunch to enable UefiSettings. <br><br> Default: UefiSettings will not be enabled unless this property is set as TrustedLaunch.",
+          "enum": [
+            "TrustedLaunch"
+          ],
+          "x-ms-enum": {
+            "name": "SecurityTypes",
+            "modelAsString": false
+          }
         }
       },
       "description": "Specifies the Security profile settings for the virtual machine or virtual machine scale set."
@@ -8796,8 +9295,8 @@
           "description": "Specifies additional base-64 encoded XML formatted information that can be included in the Unattend.xml file, which is used by Windows Setup."
         },
         "patchSettings": {
-          "$ref": "#/definitions/PatchSettings",
-          "description": "Specifies settings related to in-guest patching (KBs)."
+          "$ref": "#/definitions/WindowsPatchSettings",
+          "description": "Specifies settings related to VM Guest Patching on Windows."
         },
         "winRM": {
           "$ref": "#/definitions/WinRMConfiguration",
@@ -8844,6 +9343,10 @@
         "provisionVMAgent": {
           "type": "boolean",
           "description": "Indicates whether virtual machine agent should be provisioned on the virtual machine. <br><br> When this property is not specified in the request body, default behavior is to set it to true.  This will ensure that VM Agent is installed on the VM so that extensions can be added to the VM later."
+        },
+        "patchSettings": {
+          "$ref": "#/definitions/LinuxPatchSettings",
+          "description": "Specifies settings related to VM Guest Patching on Linux."
         }
       },
       "description": "Specifies the Linux operating system settings on the virtual machine. <br><br>For a list of supported Linux distributions, see [Linux on Azure-Endorsed Distributions](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-endorsed-distros?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json) <br><br> For running non-endorsed distributions, see [Information for Non-Endorsed Distributions](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-create-upload-generic?toc=%2fazure%2fvirtual-machines%2flinux%2ftoc.json)."
@@ -9139,6 +9642,7 @@
           "type": "object",
           "additionalProperties": {
             "type": "object",
+            "x-ms-client-name": "userAssignedIdentitiesValue",
             "properties": {
               "principalId": {
                 "readOnly": true,
@@ -9377,7 +9881,7 @@
         },
         "licenseType": {
           "type": "string",
-          "description": "Specifies that the image or disk that is being used was licensed on-premises. This element is only used for images that contain the Windows Server operating system. <br><br> Possible values are: <br><br> Windows_Client <br><br> Windows_Server <br><br> If this element is included in a request for an update, the value must match the initial value. This value cannot be updated. <br><br> For more information, see [Azure Hybrid Use Benefit for Windows Server](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-windows-hybrid-use-benefit-licensing?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json) <br><br> Minimum api-version: 2015-06-15"
+          "description": "Specifies that the image or disk that is being used was licensed on-premises. <br><br> Possible values for Windows Server operating system are: <br><br> Windows_Client <br><br> Windows_Server <br><br> Possible values for Linux Server operating system are: <br><br> RHEL_BYOS (for RHEL) <br><br> SLES_BYOS (for SUSE) <br><br> For more information, see [Azure Hybrid Use Benefit for Windows Server](https://docs.microsoft.com/azure/virtual-machines/windows/hybrid-use-benefit-licensing) <br><br> [Azure Hybrid Use Benefit for Linux Server](https://docs.microsoft.com/azure/virtual-machines/linux/azure-hybrid-benefit-linux) <br><br> Minimum api-version: 2015-06-15"
         },
         "vmId": {
           "readOnly": true,
@@ -9563,6 +10067,14 @@
         "pauseTimeBetweenBatches": {
           "type": "string",
           "description": "The wait time between completing the update for all virtual machines in one batch and starting the next batch. The time duration should be specified in ISO 8601 format. The default value is 0 seconds (PT0S)."
+        },
+        "enableCrossZoneUpgrade": {
+          "type": "boolean",
+          "description": "Allow VMSS to ignore AZ boundaries when constructing upgrade batches. Take into consideration the Update Domain and maxBatchInstancePercent to determine the batch size."
+        },
+        "prioritizeUnhealthyInstances": {
+          "type": "boolean",
+          "description": "Upgrade all unhealthy instances in a scale set before any healthy instances."
         }
       },
       "description": "The configuration parameters used while performing a rolling upgrade."
@@ -9587,6 +10099,18 @@
         }
       },
       "description": "Describes a scale-in policy for a virtual machine scale set."
+    },
+    "OrchestrationMode": {
+      "type": "string",
+      "description": "Specifies the orchestration mode for the virtual machine scale set.",
+      "enum": [
+        "Uniform",
+        "Flexible"
+      ],
+      "x-ms-enum": {
+        "name": "OrchestrationMode",
+        "modelAsString": false
+      }
     },
     "ImageOSDisk": {
       "properties": {
@@ -9820,6 +10344,7 @@
           "type": "object",
           "additionalProperties": {
             "type": "object",
+            "x-ms-client-name": "VirtualMachineScaleSetIdentityUserAssignedIdentitiesValue",
             "properties": {
               "principalId": {
                 "readOnly": true,
@@ -10673,7 +11198,7 @@
         },
         "licenseType": {
           "type": "string",
-          "description": "Specifies that the image or disk that is being used was licensed on-premises. This element is only used for images that contain the Windows Server operating system. <br><br> Possible values are: <br><br> Windows_Client <br><br> Windows_Server <br><br> If this element is included in a request for an update, the value must match the initial value. This value cannot be updated. <br><br> For more information, see [Azure Hybrid Use Benefit for Windows Server](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-windows-hybrid-use-benefit-licensing?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json) <br><br> Minimum api-version: 2015-06-15"
+          "description": "Specifies that the image or disk that is being used was licensed on-premises. <br><br> Possible values for Windows Server operating system are: <br><br> Windows_Client <br><br> Windows_Server <br><br> Possible values for Linux Server operating system are: <br><br> RHEL_BYOS (for RHEL) <br><br> SLES_BYOS (for SUSE) <br><br> For more information, see [Azure Hybrid Use Benefit for Windows Server](https://docs.microsoft.com/azure/virtual-machines/windows/hybrid-use-benefit-licensing) <br><br> [Azure Hybrid Use Benefit for Linux Server](https://docs.microsoft.com/azure/virtual-machines/linux/azure-hybrid-benefit-linux) <br><br> Minimum api-version: 2015-06-15"
         },
         "priority": {
           "$ref": "#/definitions/priority",
@@ -10799,6 +11324,10 @@
         "scaleInPolicy": {
           "$ref": "#/definitions/ScaleInPolicy",
           "description": "Specifies the scale-in policy that decides which virtual machines are chosen for removal when a Virtual Machine Scale Set is scaled-in."
+        },
+        "orchestrationMode": {
+          "$ref": "#/definitions/OrchestrationMode",
+          "description": "Specifies the orchestration mode for the virtual machine scale set."
         }
       },
       "description": "Describes the properties of a Virtual Machine Scale Set."
@@ -11384,7 +11913,7 @@
         },
         "licenseType": {
           "type": "string",
-          "description": "Specifies that the image or disk that is being used was licensed on-premises. This element is only used for images that contain the Windows Server operating system. <br><br> Possible values are: <br><br> Windows_Client <br><br> Windows_Server <br><br> If this element is included in a request for an update, the value must match the initial value. This value cannot be updated. <br><br> For more information, see [Azure Hybrid Use Benefit for Windows Server](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-windows-hybrid-use-benefit-licensing?toc=%2fazure%2fvirtual-machines%2fwindows%2ftoc.json) <br><br> Minimum api-version: 2015-06-15"
+          "description": "Specifies that the image or disk that is being used was licensed on-premises. <br><br> Possible values for Windows Server operating system are: <br><br> Windows_Client <br><br> Windows_Server <br><br> Possible values for Linux Server operating system are: <br><br> RHEL_BYOS (for RHEL) <br><br> SLES_BYOS (for SUSE) <br><br> For more information, see [Azure Hybrid Use Benefit for Windows Server](https://docs.microsoft.com/azure/virtual-machines/windows/hybrid-use-benefit-licensing) <br><br> [Azure Hybrid Use Benefit for Linux Server](https://docs.microsoft.com/azure/virtual-machines/linux/azure-hybrid-benefit-linux) <br><br> Minimum api-version: 2015-06-15"
         },
         "modelDefinitionApplied": {
           "readOnly": true,
@@ -11935,6 +12464,14 @@
         "groupByResourceName": {
           "type": "boolean",
           "description": "Group query result by Resource Name."
+        },
+        "groupByClientApplicationId": {
+          "type": "boolean",
+          "description": "Group query result by Client Application ID."
+        },
+        "groupByUserAgent": {
+          "type": "boolean",
+          "description": "Group query result by User Agent."
         }
       },
       "required": [
@@ -12004,22 +12541,44 @@
         "action"
       ]
     },
-    "PatchSettings": {
+    "WindowsPatchSettings": {
       "properties": {
         "patchMode": {
           "type": "string",
-          "description": "Specifies the mode of in-guest patching to IaaS virtual machine.<br /><br /> Possible values are:<br /><br /> **Manual** - You  control the application of patches to a virtual machine. You do this by applying patches manually inside the VM. In this mode, automatic updates are disabled; the property WindowsConfiguration.enableAutomaticUpdates must be false<br /><br /> **AutomaticByOS** - The virtual machine will automatically be updated by the OS. The property WindowsConfiguration.enableAutomaticUpdates must be true. <br /><br /> ** AutomaticByPlatform** - the virtual machine will automatically updated by the platform. The properties provisionVMAgent and WindowsConfiguration.enableAutomaticUpdates must be true ",
+          "description": "Specifies the mode of VM Guest Patching to IaaS virtual machine.<br /><br /> Possible values are:<br /><br /> **Manual** - You  control the application of patches to a virtual machine. You do this by applying patches manually inside the VM. In this mode, automatic updates are disabled; the property WindowsConfiguration.enableAutomaticUpdates must be false<br /><br /> **AutomaticByOS** - The virtual machine will automatically be updated by the OS. The property WindowsConfiguration.enableAutomaticUpdates must be true. <br /><br /> ** AutomaticByPlatform** - the virtual machine will automatically updated by the platform. The properties provisionVMAgent and WindowsConfiguration.enableAutomaticUpdates must be true ",
           "enum": [
             "Manual",
             "AutomaticByOS",
             "AutomaticByPlatform"
           ],
           "x-ms-enum": {
-            "name": "InGuestPatchMode",
+            "name": "WindowsVMGuestPatchMode",
+            "modelAsString": true
+          }
+        },
+        "enableHotpatching": {
+          "type": "boolean",
+          "description": "Enables customers to patch their Azure VMs without requiring a reboot. For enableHotpatching, the 'provisionVMAgent' must be set to true and 'patchMode' must be set to 'AutomaticByPlatform'."
+        }
+      },
+      "description": "Specifies settings related to VM Guest Patching on Windows."
+    },
+    "LinuxPatchSettings": {
+      "properties": {
+        "patchMode": {
+          "type": "string",
+          "description": "Specifies the mode of VM Guest Patching to IaaS virtual machine.<br /><br /> Possible values are:<br /><br /> **ImageDefault** - The virtual machine's default patching configuration is used. <br /><br /> **AutomaticByPlatform** - The virtual machine will be automatically updated by the platform. The property provisionVMAgent must be true",
+          "enum": [
+            "ImageDefault",
+            "AutomaticByPlatform"
+          ],
+          "x-ms-enum": {
+            "name": "LinuxVMGuestPatchMode",
             "modelAsString": true
           }
         }
-      }
+      },
+      "description": "Specifies settings related to VM Guest Patching on Linux."
     },
     "VirtualMachinePatchStatus": {
       "properties": {
@@ -12030,6 +12589,14 @@
         "lastPatchInstallationSummary": {
           "$ref": "#/definitions/LastPatchInstallationSummary",
           "description": "The installation summary of the latest installation operation for the virtual machine."
+        },
+        "configurationStatuses": {
+          "description": "The enablement status of the specified patchMode",
+          "readOnly": true,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InstanceViewStatus"
+          }
         }
       },
       "description": "The status of virtual machine patch operations."
@@ -12039,8 +12606,9 @@
         "status": {
           "type": "string",
           "readOnly": true,
-          "description": "The overall success or failure status of the operation. It remains \"InProgress\" until the operation completes. At that point it will become \"Failed\", \"Succeeded\", or \"CompletedWithWarnings.\"",
+          "description": "The overall success or failure status of the operation. It remains \"InProgress\" until the operation completes. At that point it will become \"Unknown\", \"Failed\", \"Succeeded\", or \"CompletedWithWarnings.\"",
           "enum": [
+            "Unknown",
             "InProgress",
             "Failed",
             "Succeeded",
@@ -12098,8 +12666,9 @@
         "status": {
           "type": "string",
           "readOnly": true,
-          "description": "The overall success or failure status of the operation. It remains \"InProgress\" until the operation completes. At that point it will become \"Failed\", \"Succeeded\", or \"CompletedWithWarnings.\"",
+          "description": "The overall success or failure status of the operation. It remains \"InProgress\" until the operation completes. At that point it will become \"Unknown\", \"Failed\", \"Succeeded\", or \"CompletedWithWarnings.\"",
           "enum": [
+            "Unknown",
             "InProgress",
             "Failed",
             "Succeeded",
@@ -12119,22 +12688,6 @@
           "type": "boolean",
           "readOnly": true,
           "description": "Describes whether the operation ran out of time before it completed all its intended actions"
-        },
-        "rebootStatus": {
-          "type": "string",
-          "readOnly": true,
-          "description": "The reboot status of the machine after the patch operation. It will be in \"NotNeeded\" status if reboot is not needed after the patch operation. \"Required\" will be the status once the patch is applied and machine is required to reboot. \"Started\" will be the reboot status when the machine has started to reboot. \"Failed\" will be the status if the machine is failed to reboot. \"Completed\" will be the status once the machine is rebooted successfully",
-          "enum": [
-            "NotNeeded",
-            "Required",
-            "Started",
-            "Failed",
-            "Completed"
-          ],
-          "x-ms-enum": {
-            "name": "RebootStatus",
-            "modelAsString": true
-          }
         },
         "notSelectedPatchCount": {
           "type": "integer",
@@ -12177,11 +12730,6 @@
           "readOnly": true,
           "format": "date-time",
           "description": "The UTC timestamp when the operation began."
-        },
-        "startedBy": {
-          "type": "string",
-          "readOnly": true,
-          "description": "The person or system account that started the operation"
         },
         "error": {
           "$ref": "#/definitions/ApiError",
